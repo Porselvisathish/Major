@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Bus Ticket Booking System</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <style>
+      body {
+        /* background-color: #f8f9fa; */
+        background-image: url('/images/road-1.jpg');
+        background-size: cover;
+        background-position: center;
+      }
+
+      .register-container {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 600px;
+      }
+    </style>
+  </head>
+  <body class="m-3">
+    <div class="register-container container d-flex justify-content-center">
+      <div class="col-sm-12 col-md-12">
+        <header>
+          <h4 class="text-primary text-center">
+            <strong>Passenger Registration</strong>
+          </h4>
+        </header>
+        <section>
+          <div class="register">
+            <div th:if="${param.success}" class="success-message">
+              <div class="alert alert-success">
+                You are successfully registered! <br />
+                Your email is your username.
+              </div>
+            </div>
+            <div
+              th:if="${param.emailAlreadyExists}"
+              class="emailAlreadyExists-message"
+            >
+              <div class="alert alert-danger">
+                A passenger already exists in the provided email.<br />
+                Enter a valid one.
+              </div>
+            </div>
+            <div class="register-form">
+              <form
+                action="#"
+                onsubmit="return validatePassword()"
+                th:action="@{/auth/savePassenger}"
+                th:object="${newPassenger}"
+                method="post"
+              >
+                <label for="first-name"><strong>First name</strong></label>
+                <input
+                  id="first-name"
+                  class="form-control"
+                  type="text"
+                  placeholder="John"
+                  th:field="*{firstName}"
+                  required
+                  autofocus="autofocus"
+                /><br />
+
+                <label for="last-name"><strong>Last name</strong></label>
+                <input
+                  id="last-name"
+                  class="form-control"
+                  type="text"
+                  placeholder="Doe"
+                  th:field="*{lastName}"
+                /><br />
+
+                <label for="email"><strong>Email</strong></label>
+                <input
+                  id="email"
+                  class="form-control"
+                  type="email"
+                  placeholder="jdoe@gmail.com"
+                  th:field="*{email}"
+                  required
+                /><br />
+
+                <label for="mobile"><strong>Mobile</strong></label>
+                <input
+                  id="mobile"
+                  class="form-control"
+                  type="text"
+                  placeholder="9876543210"
+                  th:field="*{mobile}"
+                  required
+                /><br />
+
+                <label for="age"><strong>Age</strong></label>
+                <input
+                  id="age"
+                  class="form-control"
+                  type="number"
+                  placeholder="25"
+                  th:field="*{age}"
+                  required
+                  min="18"
+                /><br />
+
+                <span><strong>Gender</strong></span>
+                <div class="form-control">
+                  <label
+                    ><input
+                      id="genderMale"
+                      type="radio"
+                      name="gender"
+                      placeholder="1"
+                      th:field="*{gender}"
+                      value="Male"
+                      required
+                    />Male</label
+                  >
+                  <label
+                    ><input
+                      id="genderFemale"
+                      type="radio"
+                      name="gender"
+                      placeholder="2"
+                      th:field="*{gender}"
+                      value="Female"
+                      required
+                    />Female</label
+                  >
+                </div>
+                <br />
+
+                <label for="password"><strong>Password</strong></label>
+                <input
+                  id="password"
+                  class="form-control"
+                  type="password"
+                  required
+                /><br />
+
+                <label for="password2"><strong>Confirm password</strong></label>
+                <input
+                  id="password2"
+                  class="form-control"
+                  type="password"
+                  th:field="*{password}"
+                  required
+                /><br />
+                <span
+                  id="error-message"
+                  class="text-center"
+                  style="color: red; display: none"
+                  >Error!</span
+                >
+
+                <button type="submit" class="btn btn-primary mb-1 form-control">
+                  Sign up
+                </button>
+              </form>
+            </div>
+          </div>
+          <div class="login text-center">
+            Already registered?
+            <a th:href="@{/auth/login}">Login here!</a>
+          </div>
+        </section>
+        <br />
+      </div>
+    </div>
+    <script>
+      function validatePassword() {
+        console.log("Validating password..");
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("password2").value;
+        const errorMessage = document.getElementById("error-message");
+
+        const passwordPattern =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
+
+        if (!passwordPattern.test(password)) {
+          console.log("Password does not match with pattern:");
+
+          const text =
+            "Password should have at least 8 characters, at least one capital letter, at least one small, at least one number and at least one special character.";
+          console.log(text);
+          errorMessage.textContent = text;
+          errorMessage.style.display = "block";
+          return false;
+        }
+        console.log("Password matches with pattern:");
+
+        if (password != confirmPassword) {
+          const text = "Password and Confirm password do not match.";
+          console.log(text);
+          errorMessage.textContent = text;
+          // Show error message when unequal
+          errorMessage.style.display = "block";
+          return false;
+        }
+        // Hide error message when equal
+        errorMessage.style.display = "none";
+        return true;
+      }
+    </script>
+  </body>
+</html>

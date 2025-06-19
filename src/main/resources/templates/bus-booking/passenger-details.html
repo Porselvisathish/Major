@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Passengers</title>
+  <!-- Including Bootstrap-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <!-- Including font-awesome for fonts-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .page-container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+    }
+
+    .header {
+      background-color: #007bff;
+      /* Bootstrap primary color */
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      /* Rounded corners on top */
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 10px;
+    }
+
+    .nav-link {
+      color: white;
+      /* Link color */
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav-link:hover {
+      color: #ffd700;
+      /* Gold color on hover */
+    }
+
+  </style>
+</head>
+
+<body class="m-3">
+  <div class="page-container container-fluid d-flex justify-content-center">
+    <div class="col-sm-12 col-md-12">
+      <header class="header">
+        <h4 class="mt-3 mb-3"><strong>Enter passenger details</strong></h4>
+        <p th:replace="~{common/pass-nav-bar::pass-navigation-bar}">
+          Navigation links
+        </p>
+      </header>
+      <br />
+      <section>
+        <div class="message">
+          
+          <form class="mb-4" action="#" th:action="@{/bus/savePassengerDetails}" method="GET"> <!-- Add a th:action attribute-->
+            <div class="row mb-3" th:each="row : ${#numbers.sequence(1, passengerCount)}">
+              <div class="col-md-1 text-center mt-2"><span th:text="${row}">0</span>. </div>
+              <div class="col-md-4">
+                <input type="text" class="form-control" th:name="'passenger' + ${row} + 'Name'" th:placeholder="'Passenger ' + ${row} + ' name'" required />
+              </div>
+              <div class="col-md-1">
+                <input type="number" class="form-control" th:name="'passenger' + ${row} + 'Age'" th:placeholder="Age" min="3" />
+              </div>
+              <div class="col-md-2">
+                <div class="form-control">
+                  <label>
+                    <input type="radio" th:name="'passenger' + ${row} + 'Gender'" value="Male" required/>Male
+                  </label>
+                  <label>
+                    <input type="radio" th:name="'passenger' + ${row} + 'Gender'" value="Female" required/>Female
+                  </label>
+                </div>
+              </div>
+            </div> <!--End of row div-->
+            <div class="contact-details col-md-4">
+              <strong>Email:</strong><input type="email" class="form-control" name="passengerEmail" id="email" required>
+              <strong>Mobile:</strong><input type="text" class="form-control" name="passengerMobile" id="mobile"
+              minlength="10" maxlength="10" pattern="^\d{10}$" 
+              title="Mobile number must be only 10 digits long and can contain only numbers." required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">
+              Proceed to pay
+            </button>
+          </form>
+          
+        </div>
+      </section>
+      <br />
+    </div>
+  </div>
+
+  <footer>
+    <div class="social_section" style="display: flex; justify-content: space-between">
+      <span class="footer_copyright_text">Ⓒ btw... Rights not reserved yet!</span>
+      <div class="social" style="display: flex; gap: 1.5rem">
+        <a class="social_icon" href="#" target="_blank" style="cursor: pointer">
+          <img src="/images/fb.jpeg" alt="facebook" style="width: 1.5rem; height: 1.5rem" />
+        </a>
+        <a class="social_icon" href="#" target="_blank" style="cursor: pointer">
+          <img src="/images/linkedin.jpeg" alt="linkedin" style="width: 1.5rem; height: 1.5rem" />
+        </a>
+        <a class="social_icon" href="#" target="_blank" style="cursor: pointer">
+          <img src="/images/twiter.jpeg" alt="twitter" style="width: 1.5rem; height: 1.5rem" />
+        </a>
+        <a class="social_icon" href="#" target="_blank" style="cursor: pointer">
+          <img src="/images/insta.jpeg" alt="instagram" style="width: 1.5rem; height: 1.5rem" />
+        </a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
